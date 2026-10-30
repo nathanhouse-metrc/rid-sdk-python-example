@@ -47,7 +47,7 @@ class SettingsTab(ttk.Frame):
         left.grid(row=0, column=0, sticky="nsew", padx=(16, 8), pady=16)
 
         card = Card(left, "Retail ID API settings",
-                    f"Saved to {settings.settings_path()} — this file is git-ignored. "
+                    f"Saved to {settings.display_path()} — this file is git-ignored. "
                     "API tabs use the saved values.")
         card.pack(fill="x")
 

@@ -24,6 +24,51 @@ in the background so the window stays responsive. Calls that change data in
 Metrc (generate, associate, merge, sales) have a red *Send (changes data)*
 button and ask for confirmation first.
 
+## Screenshots
+
+![Encode tab: batch ID and index encoded to HTTPS://1A4.COM/10NOIEYKAJDG6CF0EXGJL](docs/screenshots/encode.png)
+
+<details>
+<summary>More screenshots</summary>
+
+**Settings**: keys are masked once saved.
+
+![Settings tab](docs/screenshots/settings.png)
+
+**Decode**: a scanned URL broken back into batch ID and index.
+
+![Decode tab](docs/screenshots/decode.png)
+
+**Access**: checking the saved keys by listing facilities.
+
+![Access tab](docs/screenshots/access.png)
+
+**Label printing**: Retail ID info for a package.
+
+![Label printing tab](docs/screenshots/label-printing.png)
+
+**Receiving**: QR URLs and status for a package.
+
+![Receiving tab](docs/screenshots/receiving.png)
+
+**Point of sale**: reporting a sale with Retail IDs in `QrCodes`.
+
+![Point of sale tab](docs/screenshots/point-of-sale.png)
+
+**Catalog**: one Global Product.
+
+![Catalog tab](docs/screenshots/catalog.png)
+
+</details>
+
+The API results in these screenshots come from the local fake API used by the
+tests, not from Metrc. To regenerate them after changing the UI:
+
+```bash
+pip install pillow
+python tools/take_screenshots.py
+```
+
 ## Requirements
 
 - Python 3.9 or newer, with Tkinter (included in the python.org installers for
@@ -119,4 +164,5 @@ rid_example/
 ├── theme.py        colours, fonts and ttk styles
 └── widgets.py      cards, results panel, scrolling frame
 tests/test_app.py   end-to-end tests with a fake API server
+tools/take_screenshots.py   regenerates docs/screenshots/
 ```

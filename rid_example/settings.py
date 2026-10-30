@@ -29,6 +29,18 @@ def settings_path() -> Path:
     return Path(os.environ.get(SETTINGS_ENV_VAR) or DEFAULT_SETTINGS_FILE)
 
 
+def display_path(path: Path | None = None) -> str:
+    """The settings path for showing in the UI: relative to the repo, or with ~ for home."""
+    path = (path or settings_path()).resolve()
+    for base, prefix in ((DEFAULT_SETTINGS_FILE.parent, ""), (Path.home(), "~")):
+        try:
+            relative = path.relative_to(base.resolve())
+        except ValueError:
+            continue
+        return str(Path(prefix) / relative) if prefix else str(relative)
+    return str(path)
+
+
 def load_settings(path: Path | None = None) -> dict[str, str]:
     """Return the saved settings, or empty values if nothing has been saved yet."""
     path = path or settings_path()
