@@ -183,10 +183,21 @@ class App:
         root.after(100, self._drain_results)
 
     def _build_header(self) -> None:
-        header = ttk.Frame(self.root, style="Header.TFrame", padding=(20, 14))
+        header = ttk.Frame(self.root, style="Header.TFrame", padding=(16, 10))
         header.pack(fill="x")
+        # White rounded-square monogram, as in Metrc's prototype headers.
+        mark = tk.Canvas(header, width=34, height=34, background=theme.PRIMARY,
+                         highlightthickness=0)
+        r, x0, y0, x1, y1 = 7, 1, 1, 33, 33
+        mark.create_polygon(
+            x0 + r, y0, x1 - r, y0, x1, y0, x1, y0 + r, x1, y1 - r, x1, y1, x1 - r, y1,
+            x0 + r, y1, x0, y1, x0, y1 - r, x0, y0 + r, x0, y0,
+            smooth=True, fill=theme.SURFACE, outline="")
+        mark.create_text(17, 17, text="RID", fill=theme.MARK_TEXT, font=self.fonts.mark)
+        mark.pack(side="left", padx=(0, 14))
+        ttk.Label(header, text="Metrc", style="HeaderBrand.TLabel").pack(side="left")
         ttk.Label(header, text="Retail ID SDK Explorer", style="HeaderTitle.TLabel").pack(
-            side="left")
+            side="left", padx=(10, 0))
         ttk.Label(header, text=f"retailid {retailid.__version__}  ·  Python SDK showcase",
                   style="HeaderSub.TLabel").pack(side="right")
         ttk.Frame(self.root, style="Rule.TFrame", height=3).pack(fill="x")

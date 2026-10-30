@@ -4,9 +4,11 @@ Colours, fonts and ttk styles for the app.
 Every colour and font the UI uses is defined here, so the look can be changed
 in one place.
 
-PLACEHOLDERS: these values are neutral stand-ins, not Metrc brand values. Replace
-them (and add the logo in ``App._build_header``) from the metrc-brand-guidelines
-skill once it is available.
+The values match the Metrc design used in Metrc's shared prototype artifacts
+(MetrcOne Inspect Insights, QR Code Audits Using Retail ID, Preconfigured
+Inspections): a deep forest-green brand colour, warm off-white surfaces, Inter
+for text and IBM Plex Mono for codes. Those prototypes use no logo image; the
+header carries a white rounded-square monogram instead, as they do.
 """
 
 from __future__ import annotations
@@ -17,25 +19,32 @@ from tkinter import ttk
 
 # -- colours -----------------------------------------------------------------
 
-PRIMARY = "#0B3D5C"        # header bar, primary buttons, selected tab
-PRIMARY_ACTIVE = "#145A85"  # primary button hover/pressed
-ACCENT = "#2BA8A4"          # header rule, focus highlights
-BACKGROUND = "#F4F6F8"      # window background
+PRIMARY = "#26413A"         # brand green: header bar, primary buttons, titles
+PRIMARY_ACTIVE = "#2F5D4E"  # primary button hover/pressed
+ACCENT = "#149F69"          # kelly green: header rule, focus highlights
+HIGHLIGHT = "#E9F800"       # Metrc highlight yellow-green, used sparingly
+BACKGROUND = "#F3F5F2"      # window background
 SURFACE = "#FFFFFF"         # cards and inputs
-BORDER = "#D5DBE1"
-TEXT = "#1E2A33"
-TEXT_MUTED = "#5B6B78"
+SURFACE_SOFT = "#ECEEEA"    # unselected tabs
+BORDER = "#DCE2D9"
+BUTTON_BORDER = "#BFC8BE"
+TEXT = "#16241D"
+TEXT_MUTED = "#5B6A5F"
 TEXT_ON_PRIMARY = "#FFFFFF"
-SUCCESS = "#1E7D4F"
+TEXT_ON_PRIMARY_SOFT = "#CFE3D6"  # secondary text on the brand green
+MARK_TEXT = "#2F5A45"       # monogram letters on the white mark
+SUCCESS = "#2E7D32"
 ERROR = "#B3261E"
-WARNING = "#8A5A00"
+WARNING = "#7A5B00"
 
 # -- fonts -------------------------------------------------------------------
 
 # First installed family wins; Tk falls back to its default otherwise.
-HEADING_FAMILIES = ("Segoe UI Semibold", "Segoe UI", "Helvetica Neue", "Arial")
-BODY_FAMILIES = ("Segoe UI", "Helvetica Neue", "Arial")
-MONO_FAMILIES = ("Cascadia Mono", "Consolas", "Menlo", "Courier New")
+# Inter and IBM Plex Mono are the Metrc choices (free from Google Fonts).
+HEADING_FAMILIES = ("Inter SemiBold", "Inter", "Segoe UI Semibold", "Segoe UI",
+                    "Helvetica Neue", "Arial")
+BODY_FAMILIES = ("Inter", "Segoe UI", "Helvetica Neue", "Arial")
+MONO_FAMILIES = ("IBM Plex Mono", "Cascadia Mono", "Consolas", "Menlo", "Courier New")
 
 
 def _first_installed(root: tk.Misc, families: tuple[str, ...]) -> str:
@@ -61,6 +70,7 @@ class Fonts:
         self.small = font(body, 9)
         self.mono = font(mono, 10)
         self.result_url = font(mono, 13, "bold")
+        self.mark = font(body, 9, "bold")
 
 
 def apply(root: tk.Tk) -> Fonts:
@@ -90,10 +100,12 @@ def apply(root: tk.Tk) -> Fonts:
     style.configure("CardHint.TLabel", background=SURFACE, foreground=TEXT_MUTED, font=fonts.small)
     style.configure("Hint.TLabel", foreground=TEXT_MUTED, font=fonts.small)
     style.configure("Section.TLabel", font=fonts.heading, foreground=PRIMARY)
-    style.configure("HeaderTitle.TLabel", background=PRIMARY, foreground=TEXT_ON_PRIMARY,
-                    font=fonts.title)
+    style.configure("HeaderTitle.TLabel", background=PRIMARY, foreground=TEXT_ON_PRIMARY_SOFT,
+                    font=fonts.heading)
     style.configure("HeaderSub.TLabel", background=PRIMARY, foreground=TEXT_ON_PRIMARY,
                     font=fonts.small)
+    style.configure("HeaderBrand.TLabel", background=PRIMARY, foreground=TEXT_ON_PRIMARY,
+                    font=fonts.title)
     style.configure("Status.TLabel", background=SURFACE, foreground=TEXT_MUTED, font=fonts.small,
                     padding=(12, 4))
 
@@ -109,7 +121,8 @@ def apply(root: tk.Tk) -> Fonts:
               selectbackground=[("readonly", SURFACE)], selectforeground=[("readonly", TEXT)])
     style.configure("TSpinbox", fieldbackground=SURFACE, padding=4)
 
-    style.configure("TButton", padding=(12, 6), background=SURFACE, bordercolor=BORDER)
+    style.configure("TButton", padding=(12, 6), background=SURFACE, bordercolor=BUTTON_BORDER,
+                    font=fonts.body_bold)
     style.map("TButton", background=[("active", BACKGROUND)])
     style.configure("Primary.TButton", background=PRIMARY, foreground=TEXT_ON_PRIMARY,
                     bordercolor=PRIMARY, font=fonts.body_bold)
@@ -121,7 +134,7 @@ def apply(root: tk.Tk) -> Fonts:
     style.map("Danger.TButton", background=[("active", BACKGROUND)])
 
     style.configure("TNotebook", background=BACKGROUND, borderwidth=0, tabmargins=(12, 8, 12, 0))
-    style.configure("TNotebook.Tab", padding=(14, 6), background=BACKGROUND, foreground=TEXT_MUTED,
+    style.configure("TNotebook.Tab", padding=(14, 6), background=SURFACE_SOFT, foreground=TEXT_MUTED,
                     bordercolor=BORDER)
     style.map("TNotebook.Tab",
               background=[("selected", SURFACE)],

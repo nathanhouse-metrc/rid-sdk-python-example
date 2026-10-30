@@ -42,6 +42,14 @@ button and ask for confirmation first.
   rid-sdk checkout does not have `python/src/retailid/api.py` yet, check out a
   branch that does (for example `python-api-1`).
 
+## Look and feel
+
+Colours and fonts follow the Metrc design used in Metrc's shared prototypes
+(forest-green brand bar, warm off-white surfaces, Inter and IBM Plex Mono); all
+of them are tokens in `rid_example/theme.py`. Inter and IBM Plex Mono are used
+when installed (free from Google Fonts); otherwise the app falls back to Segoe
+UI / Helvetica and Cascadia Mono / Consolas / Menlo.
+
 ## Install
 
 The app depends on the SDK through an editable install of the local checkout
