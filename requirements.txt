@@ -1,0 +1,3 @@
+# The retailid SDK is installed from a local checkout of rid-sdk, next to this repo.
+# Adjust the path if your checkout lives elsewhere.
+-e ../rid-sdk/python

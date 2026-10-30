@@ -218,3 +218,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Saved app settings: holds Retail ID API keys. Never commit.
+settings.json
