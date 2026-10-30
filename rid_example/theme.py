@@ -3,6 +3,10 @@ Colours, fonts and ttk styles for the app.
 
 Every colour and font the UI uses is defined here, so the look can be changed
 in one place.
+
+PLACEHOLDERS: these values are neutral stand-ins, not Metrc brand values. Replace
+them (and add the logo in ``App._build_header``) from the metrc-brand-guidelines
+skill once it is available.
 """
 
 from __future__ import annotations
