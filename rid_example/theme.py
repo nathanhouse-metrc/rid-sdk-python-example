@@ -1,0 +1,143 @@
+"""
+Colours, fonts and ttk styles for the app.
+
+Every colour and font the UI uses is defined here, so the look can be changed
+in one place.
+
+The values match the Metrc design used in Metrc's shared prototype artifacts
+(MetrcOne Inspect Insights, QR Code Audits Using Retail ID, Preconfigured
+Inspections): a deep forest-green brand colour, warm off-white surfaces, Inter
+for text and IBM Plex Mono for codes. Those prototypes use no logo image; the
+header carries a white rounded-square monogram instead, as they do.
+"""
+
+from __future__ import annotations
+
+import tkinter as tk
+import tkinter.font as tkfont
+from tkinter import ttk
+
+# -- colours -----------------------------------------------------------------
+
+PRIMARY = "#26413A"         # brand green: header bar, primary buttons, titles
+PRIMARY_ACTIVE = "#2F5D4E"  # primary button hover/pressed
+ACCENT = "#149F69"          # kelly green: header rule, focus highlights
+HIGHLIGHT = "#E9F800"       # Metrc highlight yellow-green, used sparingly
+BACKGROUND = "#F3F5F2"      # window background
+SURFACE = "#FFFFFF"         # cards and inputs
+SURFACE_SOFT = "#ECEEEA"    # unselected tabs
+BORDER = "#DCE2D9"
+BUTTON_BORDER = "#BFC8BE"
+TEXT = "#16241D"
+TEXT_MUTED = "#5B6A5F"
+TEXT_ON_PRIMARY = "#FFFFFF"
+TEXT_ON_PRIMARY_SOFT = "#CFE3D6"  # secondary text on the brand green
+MARK_TEXT = "#2F5A45"       # monogram letters on the white mark
+SUCCESS = "#2E7D32"
+ERROR = "#B3261E"
+WARNING = "#7A5B00"
+
+# -- fonts -------------------------------------------------------------------
+
+# First installed family wins; Tk falls back to its default otherwise.
+# Inter and IBM Plex Mono are the Metrc choices (free from Google Fonts).
+HEADING_FAMILIES = ("Inter SemiBold", "Inter", "Segoe UI Semibold", "Segoe UI",
+                    "Helvetica Neue", "Arial")
+BODY_FAMILIES = ("Inter", "Segoe UI", "Helvetica Neue", "Arial")
+MONO_FAMILIES = ("IBM Plex Mono", "Cascadia Mono", "Consolas", "Menlo", "Courier New")
+
+
+def _first_installed(root: tk.Misc, families: tuple[str, ...]) -> str:
+    installed = set(tkfont.families(root))
+    return next((f for f in families if f in installed), "TkDefaultFont")
+
+
+class Fonts:
+    """Named Tk fonts (named fonts survive ttk style configuration reliably)."""
+
+    def __init__(self, root: tk.Misc):
+        heading = _first_installed(root, HEADING_FAMILIES)
+        body = _first_installed(root, BODY_FAMILIES)
+        mono = _first_installed(root, MONO_FAMILIES)
+
+        def font(family: str, size: int, weight: str = "normal") -> tkfont.Font:
+            return tkfont.Font(root, family=family, size=size, weight=weight)
+
+        self.title = font(heading, 16)
+        self.heading = font(heading, 12)
+        self.body = font(body, 10)
+        self.body_bold = font(body, 10, "bold")
+        self.small = font(body, 9)
+        self.mono = font(mono, 10)
+        self.result_url = font(mono, 13, "bold")
+        self.mark = font(body, 9, "bold")
+
+
+def apply(root: tk.Tk) -> Fonts:
+    """Configure ttk styles on ``root`` and return the fonts in use."""
+    fonts = Fonts(root)
+    root.configure(background=BACKGROUND)
+    # Classic and ttk widgets without an explicit font use these named defaults.
+    # (Setting "*Font" in the option database would override ttk style fonts.)
+    for name in ("TkDefaultFont", "TkTextFont", "TkMenuFont"):
+        tkfont.nametofont(name, root).configure(family=fonts.body.cget("family"),
+                                                size=fonts.body.cget("size"))
+    root.option_add("*TCombobox*Listbox.font", fonts.body)
+
+    style = ttk.Style(root)
+    style.theme_use("clam")
+
+    style.configure(".", background=BACKGROUND, foreground=TEXT, font=fonts.body,
+                    bordercolor=BORDER, focuscolor=ACCENT)
+    style.configure("TFrame", background=BACKGROUND)
+    style.configure("Card.TFrame", background=SURFACE, relief="solid", borderwidth=1)
+    style.configure("Header.TFrame", background=PRIMARY)
+    style.configure("Rule.TFrame", background=ACCENT)
+
+    style.configure("TLabel", background=BACKGROUND, foreground=TEXT)
+    style.configure("Card.TLabel", background=SURFACE)
+    style.configure("CardTitle.TLabel", background=SURFACE, font=fonts.heading, foreground=PRIMARY)
+    style.configure("CardHint.TLabel", background=SURFACE, foreground=TEXT_MUTED, font=fonts.small)
+    style.configure("Hint.TLabel", foreground=TEXT_MUTED, font=fonts.small)
+    style.configure("Section.TLabel", font=fonts.heading, foreground=PRIMARY)
+    style.configure("HeaderTitle.TLabel", background=PRIMARY, foreground=TEXT_ON_PRIMARY_SOFT,
+                    font=fonts.heading)
+    style.configure("HeaderSub.TLabel", background=PRIMARY, foreground=TEXT_ON_PRIMARY,
+                    font=fonts.small)
+    style.configure("HeaderBrand.TLabel", background=PRIMARY, foreground=TEXT_ON_PRIMARY,
+                    font=fonts.title)
+    style.configure("Status.TLabel", background=SURFACE, foreground=TEXT_MUTED, font=fonts.small,
+                    padding=(12, 4))
+
+    style.configure("TCheckbutton", background=SURFACE)
+    style.configure("TRadiobutton", background=SURFACE)
+    style.map("TCheckbutton", background=[("active", SURFACE)])
+    style.map("TRadiobutton", background=[("active", SURFACE)])
+
+    style.configure("TEntry", fieldbackground=SURFACE, padding=4)
+    style.map("TEntry", bordercolor=[("focus", ACCENT)], lightcolor=[("focus", ACCENT)])
+    style.configure("TCombobox", fieldbackground=SURFACE, padding=4)
+    style.map("TCombobox", fieldbackground=[("readonly", SURFACE)],
+              selectbackground=[("readonly", SURFACE)], selectforeground=[("readonly", TEXT)])
+    style.configure("TSpinbox", fieldbackground=SURFACE, padding=4)
+
+    style.configure("TButton", padding=(12, 6), background=SURFACE, bordercolor=BUTTON_BORDER,
+                    font=fonts.body_bold)
+    style.map("TButton", background=[("active", BACKGROUND)])
+    style.configure("Primary.TButton", background=PRIMARY, foreground=TEXT_ON_PRIMARY,
+                    bordercolor=PRIMARY, font=fonts.body_bold)
+    style.map("Primary.TButton",
+              background=[("disabled", BORDER), ("active", PRIMARY_ACTIVE)],
+              foreground=[("disabled", TEXT_MUTED)])
+    style.configure("Danger.TButton", background=SURFACE, foreground=ERROR, bordercolor=ERROR,
+                    font=fonts.body_bold)
+    style.map("Danger.TButton", background=[("active", BACKGROUND)])
+
+    style.configure("TNotebook", background=BACKGROUND, borderwidth=0, tabmargins=(12, 8, 12, 0))
+    style.configure("TNotebook.Tab", padding=(14, 6), background=SURFACE_SOFT, foreground=TEXT_MUTED,
+                    bordercolor=BORDER)
+    style.map("TNotebook.Tab",
+              background=[("selected", SURFACE)],
+              foreground=[("selected", PRIMARY)],
+              font=[("selected", fonts.body_bold)])
+    return fonts
