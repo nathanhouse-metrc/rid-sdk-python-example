@@ -83,10 +83,8 @@ python tools/take_screenshots.py
   └── rid-sdk-python-example/   ← this repo
   ```
 
-  The API tabs need the SDK's Retail ID API client (`retailid.api`). If your
-  rid-sdk checkout does not have `python/src/retailid/api.py` yet, check out a
-  branch that does (for example `python-api-1`).
-
+  The API tabs need the SDK's Retail ID API client (`retailid.api`). 
+  
 ## Look and feel
 
 Colours and fonts follow the Metrc design used in Metrc's shared prototypes
